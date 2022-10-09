@@ -2,4 +2,3 @@ quickvenv
 setup.py
 build
 dist
-src/tests
