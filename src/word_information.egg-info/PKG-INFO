@@ -1,0 +1,9 @@
+Metadata-Version: 2.1
+Name: word-information
+Version: 0.0.7
+Summary: A module to get the meanings, synonyms, antonyms and part-of-speech of a given word
+Author: Bayo Ade
+Author-email: bayo.300@gmail.com
+Keywords: word,dictionary,meaning,synonym,antonym,noun,verb,adjective,adverb,part-of-speech
+Classifier: Intended Audience :: Developers
+License-File: LICENSE
