@@ -2,3 +2,4 @@ quickvenv
 setup.py
 build
 dist
+src/wordset_open_source_data
