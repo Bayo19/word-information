@@ -1,6 +1,8 @@
 LICENSE
 README.md
 setup.py
+src/tests/__init__.py
+src/tests/test_word_information.py
 src/wordInfo/__init__.py
 src/wordInfo/word_information.py
 src/word_information.egg-info/PKG-INFO

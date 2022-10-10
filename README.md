@@ -38,7 +38,6 @@ This will return a python dictionary containing the part_of_speech of the word a
 {'NOUN': [{'meaning': 'a seat, especially for one person, usually having four legs for support and a rest for the back and often having rests for the arms', 'examples': None}, {'meaning': 'something that serves as a chair or supports like a chair', 'examples': ' The two men clasped hands to make a chair for their injured companion'}, {'meaning': 'a seat of office or authority', 'examples': None}]}                                                                       
 ```
 
-
 For Synonyms,
 
 ```python
@@ -58,4 +57,4 @@ This will return a list of antonyms of the given word
 ### About
 
 Current Version: 0.0.8
-Created By Bayo Ade, October 2022
+Created By Bayo Ade October 2022

@@ -105,6 +105,3 @@ class WordInfo:
         
         return self._split_words_and_examples(list_of_definitions_and_examples_default_content)
 
-
-# wi = WordInfo()
-# print(wi.get_part_of_speech("man"))
