@@ -1,6 +1,8 @@
 from typing import Any, List, Dict, Union
+import json
+import itertools
+import os
 from bs4 import BeautifulSoup, ResultSet
-
 import requests
 
 class WordInfo:
@@ -9,12 +11,17 @@ class WordInfo:
 
     def get_meaning(self, word: str) -> Dict[str, List[Dict[str, Any]]]:
         """
-        Returns part_of_speech and meanings for a given word
+        Returns part-of-speech and meanings for a given word
         """
         type_of_argument_entered = type(word)
         if type(word) != str:
             raise TypeError(F"The parameter 'word' should be str not {type_of_argument_entered.__name__}")
-        response = requests.get("https://www.dictionary.com/browse/{}".format(word))
+            
+        try:
+            response = requests.get("https://www.dictionary.com/browse/{}".format(word))
+        except ConnectionError:
+            self._open_source_get_meaning(word)
+
         soup = BeautifulSoup(response.text, 'html.parser')
         meaning = soup.find('div', {'class': 'default-content'})
         sections = meaning.find_all('section', {"class": "css-109x55k e1hk9ate4"})
@@ -29,15 +36,18 @@ class WordInfo:
         type_of_argument_entered = type(word)
         if type(word) != str:
             raise TypeError(F"The parameter 'word' should be str not {type_of_argument_entered.__name__}")
-        no_synonym_message = "No Synonym for this word in this API"
-        response = requests.get('https://www.thesaurus.com/browse/{}'.format(word))
+        try:
+            response = requests.get('https://www.thesaurus.com/browse/{}'.format(word))
+        except ConnectionError:
+            return self._open_source_get_synonym(word)
+
         soup = BeautifulSoup(response.text, 'html.parser')
         div =  soup.find('div', {'class': 'css-ixatld e15rdun50'})
         if not div:
-            return no_synonym_message
+            return self._open_source_get_synonym(word)
         lis = div.find_all('li')
         if not lis:
-            return no_synonym_message
+            return self._open_source_get_synonym(word)
         return [li.text.strip() for li in lis]
 
     def get_antonym(self, word: str) -> List[str]:
@@ -47,25 +57,29 @@ class WordInfo:
         type_of_argument_entered = type(word)
         if type(word) != str:
             raise TypeError(F"The parameter 'word' should be str not {type_of_argument_entered.__name__}")
-        no_antonym_message = "No Antonym for this word in this API"
+        
         response = requests.get('https://www.thesaurus.com/browse/{}'.format(word))
         soup = BeautifulSoup(response.text, 'html.parser')
         div = soup.find('div', {'id': 'antonyms'})
         if not div:
-            return no_antonym_message
+            return None
         lis = div.find_all('li')
         if not lis:
-            return no_antonym_message
+            return None
         return [li.text.strip() for li in lis]
                 
     def get_part_of_speech(self, word: str) -> Union[List[str],str]:
         """
-        Returns the part_of_speech for a given word
+        Returns the part-of-speech for a given word
         """
         type_of_argument_entered = type(word)
         if type(word) != str:
             raise TypeError(F"The parameter 'word' should be str not {type_of_argument_entered.__name__}")
-        response = requests.get("https://www.dictionary.com/browse/{}".format(word))
+        try:
+            response = requests.get("https://www.dictionary.com/browse/{}".format(word))
+        except ConnectionError:
+            return self._open_source_get_part_of_spech(word)
+
         soup = BeautifulSoup(response.text, 'html.parser')
         meaning = soup.find('div', {'class': 'default-content'})
         sections = meaning.find_all('section', {"class": "css-109x55k e1hk9ate4"})
@@ -105,3 +119,60 @@ class WordInfo:
         
         return self._split_words_and_examples(list_of_definitions_and_examples_default_content)
 
+    def _get_open_source_dataset(self, word: str) -> Dict:
+        """
+        Gets data for word from open-source wordnet dataset
+        """
+        type_of_argument_entered = type(word)
+        if type(word) != str:
+            raise TypeError(F"The parameter 'word' should be str not {type_of_argument_entered.__name__}")
+        first_letter_of_word = word[:1]
+        abs_path = os.path.join("wordset_open_source_data", F"{first_letter_of_word}.json")
+        data = json.loads(open(abs_path).read())
+        meaning: dict = data.get(word)
+        if not meaning:
+            return None
+        return meaning
+
+    def _open_source_get_meaning(self, word:str) -> Dict[str, List[Dict[str, Any]]]:
+        """
+        Returns meanings for given word from open source dataset (wordset)
+        """
+        if self._get_open_source_dataset(word) == None:
+            return None
+        original_meanings_data = self._get_open_source_dataset(word)["meanings"]
+        part_of_speech_list = []
+        for d in original_meanings_data:
+            part_of_speech_list.append(d["speech_part"])
+            d.pop("id")
+            d["meaning"] = d.pop("def")
+            if d.get("example"):
+                d["examples"] = d.pop("example")
+            if d.get("synonyms"):
+                d.pop("synonyms")
+            d["examples"] = None
+        
+        result = {k.upper(): [d for d in original_meanings_data if d.get("speech_part") == k] for k in part_of_speech_list}
+        return {k: [{"meaning": d.get("meaning"), "examples": d.get("examples")} for d in v] for k,v in result.items()}
+        
+    def _open_source_get_synonym(self, word:str) -> List[str]:
+        """
+        Returns synonym for given word from open source dataset (wordset)
+        
+        """
+        if self._get_open_source_dataset(word) == None:
+            return None
+        original_meanings_data = self._get_open_source_dataset(word)["meanings"]
+        return list(itertools.chain.from_iterable([d.get("synonyms") for d in original_meanings_data if d.get("synonyms") != None]))
+    
+    def _open_source_get_part_of_speech(self, word:str) -> List[str]:
+        """
+        Returns part-of-speech for given word from open source dataset (wordset)
+        
+        """
+        if self._get_open_source_dataset(word) == None:
+            return None
+        original_meanings_data = self._get_open_source_dataset(word)["meanings"]
+        result = []
+        [result.append(d["speech_part"].upper()) for d in original_meanings_data if d["speech_part"].upper() not in result]
+        return result

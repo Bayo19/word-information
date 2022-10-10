@@ -101,3 +101,30 @@ def test_get_output_of_get_antonym(test_input, expected):
 def test_output_of_get_part_of_speech(test_input, expected):
     word_info = WordInfo()
     assert word_info.get_part_of_speech(test_input) == expected
+
+@pytest.mark.parametrize("test_input,expected", [
+    ("grand", {'ADJECTIVE': [{'meaning': "used of a person's appearance or behavior", 'examples': None}, {'meaning': 'the most important and magnificent in adornment', 'examples': None}, {'meaning': 'of behavior that is impressive and ambitious in scale or scope', 'examples': None}, {'meaning': 'large and impressive in physical size or extent', 'examples': None}, {'meaning': 'of high moral or intellectual value', 'examples': None}, {'meaning': 'of or befitting a lord', 'examples': None}, {'meaning': 'extraordinarily good or great', 'examples': None}, {'meaning': 'rich and superior in quality', 'examples': None}], 'NOUN': [{'meaning': 'a piano with the strings on a horizontal harp-shaped frame', 'examples': None}, {'meaning': 'the cardinal number that is the product of 10 and 100', 'examples': None}]}),
+    ("travel", {'NOUN': [{'meaning': 'self-propelled movement', 'examples': None}, {'meaning': 'the act of going from one place to another', 'examples': None}, {'meaning': 'a movement through space that changes the location of something', 'examples': None}], 'VERB': [{'meaning': 'change location', 'examples': None}, {'meaning': 'undergo transportation as in a vehicle', 'examples': None}, {'meaning': 'make a trip for pleasure', 'examples': None}, {'meaning': 'undertake a journey or trip', 'examples': None}, {'meaning': 'travel upon or across', 'examples': None}, {'meaning': 'travel from place to place, as for the purpose of finding work, preaching, or acting as a judge', 'examples': None}]})
+])
+def test_output_of__open_source_get_meaning(test_input, expected):
+    word_info = WordInfo()
+    assert word_info._open_source_get_meaning(test_input) == expected
+
+@pytest.mark.parametrize("test_input,expected", [
+    ("mask", ['masquerade', 'block out', 'cloak', 'dissemble', 'disguise']),
+    ("try", ['effort', 'try on', 'render', 'taste', 'sample', 'try out', 'strain', 'hear', 'judge', 'adjudicate', 'attempt', 'test']),
+    ("journey", ['journeying', 'travel', 'travel'])
+])
+def test_output_of__open_source_get_synonym(test_input, expected):
+    word_info = WordInfo()
+    assert word_info._open_source_get_synonym(test_input) == expected
+
+
+@pytest.mark.parametrize("test_input,expected", [
+    ("play", ['NOUN', 'VERB']),
+    ("wonder", ['NOUN', 'VERB']),
+    ("grand", ['ADJECTIVE', 'NOUN'])
+])
+def test_output_of__open_source_get_part_of_speech(test_input, expected):
+    word_info = WordInfo()
+    assert word_info._open_source_get_part_of_speech(test_input) == expected
