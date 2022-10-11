@@ -56,5 +56,5 @@ This will return a list of antonyms of the given word
 
 ### About
 
-Current Version: 0.0.8
+Current Version: 0.1.2
 Created By Bayo Ade October 2022

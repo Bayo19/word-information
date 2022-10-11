@@ -151,7 +151,6 @@ class WordInfo:
             if d.get("synonyms"):
                 d.pop("synonyms")
             d["examples"] = None
-        
         result = {k.upper(): [d for d in original_meanings_data if d.get("speech_part") == k] for k in part_of_speech_list}
         return {k: [{"meaning": d.get("meaning"), "examples": d.get("examples")} for d in v] for k,v in result.items()}
         
