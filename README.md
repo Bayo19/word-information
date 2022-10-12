@@ -21,6 +21,7 @@ For example,
 
 ```python
 from wordInfo.word_information import WordInfo
+
 word_info = WordInfo()
 ```
 
