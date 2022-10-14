@@ -47,6 +47,10 @@ print (word_info.get_synonym("glory"))
 
 This will return a list of synonyms of the given word
 
+```
+['celebrity', 'dignity', 'grandeur', 'greatness', 'honor', 'immortality', 'majesty', 'prestige', 'reputation', 'splendor', 'triumph', 'distinction', 'eminence', 'exaltation', 'illustriousness', 'kudos', 'magnificence', 'nobility', 'praise', 'renown', 'sublimity']
+```
+
 For Antonyms,
 
 ```python
@@ -55,6 +59,9 @@ print (word_info.get_antonym("sad"))
 ```
 This will return a list of antonyms of the given word
 
+```
+['cheerful', 'glad', 'happy', 'hopeful', 'joyful']
+```
 ### About
 
 Current Version: 0.1.2
