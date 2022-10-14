@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: word-information
-Version: 0.1.2
+Version: 0.1.3
 Summary: A fully functional dictionary module for Python to get the meanings, synonyms, antonyms and part-of-speech of a given word
 Home-page: https://github.com/Bayo19/word-information
 Author: Bayo Ade
@@ -33,6 +33,7 @@ For example,
 
 ```python
 from wordInfo.word_information import WordInfo
+
 word_info = WordInfo()
 ```
 
@@ -58,6 +59,10 @@ print (word_info.get_synonym("glory"))
 
 This will return a list of synonyms of the given word
 
+```
+['celebrity', 'dignity', 'grandeur', 'greatness', 'honor', 'immortality', 'majesty', 'prestige', 'reputation', 'splendor', 'triumph', 'distinction', 'eminence', 'exaltation', 'illustriousness', 'kudos', 'magnificence', 'nobility', 'praise', 'renown', 'sublimity']
+```
+
 For Antonyms,
 
 ```python
@@ -66,6 +71,9 @@ print (word_info.get_antonym("sad"))
 ```
 This will return a list of antonyms of the given word
 
+```
+['cheerful', 'glad', 'happy', 'hopeful', 'joyful']
+```
 ### About
 
 Current Version: 0.1.2

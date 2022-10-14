@@ -2,7 +2,7 @@
 
 word-information is a Dictionary Module for Python 3 to get definitions, synonyms, antonyms, and part-of-speech of words. 
 
-word-information uses requests and bs4 as dependencies
+word-information uses requests and bs4 as dependencies and also uses wordset open-source dictionary as a data source.
 
 ### Installation
 
@@ -64,5 +64,5 @@ This will return a list of antonyms of the given word
 ```
 ### About
 
-Current Version: 0.1.2
+Current Version: 0.1.4
 Created By Bayo Ade October 2022
