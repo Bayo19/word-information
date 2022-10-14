@@ -19,8 +19,8 @@ class WordInfo:
             
         try:
             response = requests.get("https://www.dictionary.com/browse/{}".format(word))
-        except ConnectionError:
-            self._open_source_get_meaning(word)
+        except requests.exceptions.ConnectionError:
+            return self._open_source_get_meaning(word)
 
         soup = BeautifulSoup(response.text, 'html.parser')
         meaning = soup.find('div', {'class': 'default-content'})
@@ -38,7 +38,7 @@ class WordInfo:
             raise TypeError(F"The parameter 'word' should be str not {type_of_argument_entered.__name__}")
         try:
             response = requests.get('https://www.thesaurus.com/browse/{}'.format(word))
-        except ConnectionError:
+        except requests.exceptions.ConnectionError:
             return self._open_source_get_synonym(word)
 
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -77,7 +77,7 @@ class WordInfo:
             raise TypeError(F"The parameter 'word' should be str not {type_of_argument_entered.__name__}")
         try:
             response = requests.get("https://www.dictionary.com/browse/{}".format(word))
-        except ConnectionError:
+        except requests.exceptions.ConnectionError:
             return self._open_source_get_part_of_spech(word)
 
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -126,8 +126,10 @@ class WordInfo:
         type_of_argument_entered = type(word)
         if type(word) != str:
             raise TypeError(F"The parameter 'word' should be str not {type_of_argument_entered.__name__}")
+
         first_letter_of_word = word[:1]
         abs_path = os.path.join("wordset_open_source_data", F"{first_letter_of_word}.json")
+        print(F"src/{abs_path}")
         data = json.loads(open(abs_path).read())
         meaning: dict = data.get(word)
         if not meaning:
@@ -138,9 +140,12 @@ class WordInfo:
         """
         Returns meanings for given word from open source dataset (wordset)
         """
-        if self._get_open_source_dataset(word) == None:
+        try:
+            open_source_data = self._get_open_source_dataset(word)
+        except FileNotFoundError:
             return None
-        original_meanings_data = self._get_open_source_dataset(word)["meanings"]
+
+        original_meanings_data = open_source_data["meanings"]
         part_of_speech_list = []
         for d in original_meanings_data:
             part_of_speech_list.append(d["speech_part"])
@@ -159,9 +164,12 @@ class WordInfo:
         Returns synonym for given word from open source dataset (wordset)
         
         """
-        if self._get_open_source_dataset(word) == None:
+        try:
+            open_source_data = self._get_open_source_dataset(word)
+        except FileNotFoundError:
             return None
-        original_meanings_data = self._get_open_source_dataset(word)["meanings"]
+
+        original_meanings_data = open_source_data["meanings"]
         return list(itertools.chain.from_iterable([d.get("synonyms") for d in original_meanings_data if d.get("synonyms") != None]))
     
     def _open_source_get_part_of_speech(self, word:str) -> List[str]:
@@ -169,9 +177,16 @@ class WordInfo:
         Returns part-of-speech for given word from open source dataset (wordset)
         
         """
-        if self._get_open_source_dataset(word) == None:
+        try:
+            open_source_data = self._get_open_source_dataset(word)
+        except FileNotFoundError:
             return None
-        original_meanings_data = self._get_open_source_dataset(word)["meanings"]
+
+        original_meanings_data = open_source_data["meanings"]
         result = []
         [result.append(d["speech_part"].upper()) for d in original_meanings_data if d["speech_part"].upper() not in result]
         return result
+
+
+word_info = WordInfo()
+print(word_info.get_meaning("bath"))
