@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: word-information
-Version: 0.1.3
+Version: 0.1.5
 Summary: A fully functional dictionary module for Python to get the meanings, synonyms, antonyms and part-of-speech of a given word
 Home-page: https://github.com/Bayo19/word-information
 Author: Bayo Ade
@@ -14,7 +14,7 @@ License-File: LICENSE
 
 word-information is a Dictionary Module for Python 3 to get definitions, synonyms, antonyms, and part-of-speech of words. 
 
-word-information uses requests and bs4 as dependencies
+word-information uses requests and bs4 as dependencies and also uses wordset open-source dictionary as a data source.
 
 ### Installation
 
@@ -76,5 +76,5 @@ This will return a list of antonyms of the given word
 ```
 ### About
 
-Current Version: 0.1.2
+Current Version: 0.1.5
 Created By Bayo Ade October 2022

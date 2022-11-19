@@ -129,7 +129,6 @@ class WordInfo:
 
         first_letter_of_word = word[:1]
         abs_path = os.path.join("wordset_open_source_data", F"{first_letter_of_word}.json")
-        print(F"src/{abs_path}")
         data = json.loads(open(abs_path).read())
         meaning: dict = data.get(word)
         if not meaning:
@@ -189,4 +188,3 @@ class WordInfo:
 
 
 word_info = WordInfo()
-print(word_info.get_meaning("bath"))

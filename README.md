@@ -64,5 +64,5 @@ This will return a list of antonyms of the given word
 ```
 ### About
 
-Current Version: 0.1.4
+Current Version: 0.1.5
 Created By Bayo Ade October 2022
