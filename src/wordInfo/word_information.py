@@ -13,10 +13,11 @@ class WordInfo:
         """
         Returns part-of-speech and meanings for a given word
         """
-        type_of_argument_entered = type(word)
-        if type(word) != str:
-            raise TypeError(F"The parameter 'word' should be str not {type_of_argument_entered.__name__}")
-            
+        try:
+            self._typechecker_str(word)
+        except TypeError:
+            raise
+
         try:
             response = requests.get("https://www.dictionary.com/browse/{}".format(word))
         except requests.exceptions.ConnectionError:
@@ -33,9 +34,11 @@ class WordInfo:
         """
         Returns a list of synonyms for a given word
         """
-        type_of_argument_entered = type(word)
-        if type(word) != str:
-            raise TypeError(F"The parameter 'word' should be str not {type_of_argument_entered.__name__}")
+        try:
+            self._typechecker_str(word)
+        except TypeError:
+            raise
+
         try:
             response = requests.get('https://www.thesaurus.com/browse/{}'.format(word))
         except requests.exceptions.ConnectionError:
@@ -54,9 +57,10 @@ class WordInfo:
         """
         Returns a list of antonyms of a given word
         """
-        type_of_argument_entered = type(word)
-        if type(word) != str:
-            raise TypeError(F"The parameter 'word' should be str not {type_of_argument_entered.__name__}")
+        try:
+            self._typechecker_str(word)
+        except TypeError:
+            raise
         
         response = requests.get('https://www.thesaurus.com/browse/{}'.format(word))
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -72,9 +76,10 @@ class WordInfo:
         """
         Returns the part-of-speech for a given word
         """
-        type_of_argument_entered = type(word)
-        if type(word) != str:
-            raise TypeError(F"The parameter 'word' should be str not {type_of_argument_entered.__name__}")
+        try:
+            self._typechecker_str(word)
+        except TypeError:
+            raise
         try:
             response = requests.get("https://www.dictionary.com/browse/{}".format(word))
         except requests.exceptions.ConnectionError:
@@ -123,9 +128,10 @@ class WordInfo:
         """
         Gets data for word from open-source wordnet dataset
         """
-        type_of_argument_entered = type(word)
-        if type_of_argument_entered != str:
-            raise TypeError(F"The parameter 'word' should be str not {type_of_argument_entered.__name__}")
+        try:
+            self._typechecker_str(word)
+        except TypeError:
+            raise
 
         first_letter_of_word = word[:1]
         abs_path = os.path.join("wordset_open_source_data", F"{first_letter_of_word}.json")
@@ -186,3 +192,11 @@ class WordInfo:
         [result.append(d["speech_part"].upper()) for d in original_meanings_data if d["speech_part"].upper() not in result]
         return result
 
+    def _typechecker_str(self, word: str) -> None:
+        type_of_argument_entered = type(word)
+        error_message = F"The parameter 'word' should be str not {type_of_argument_entered.__name__}"
+        if type_of_argument_entered != str:
+            raise TypeError(error_message)
+
+word_info = WordInfo()
+print(word_info.get_meaning(7))
