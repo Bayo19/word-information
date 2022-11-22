@@ -3,3 +3,5 @@ setup.py
 build
 dist
 src/wordset_open_source_data
+.pytest_cache
+__pycache__

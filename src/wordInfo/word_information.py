@@ -124,7 +124,7 @@ class WordInfo:
         Gets data for word from open-source wordnet dataset
         """
         type_of_argument_entered = type(word)
-        if type(word) != str:
+        if type_of_argument_entered != str:
             raise TypeError(F"The parameter 'word' should be str not {type_of_argument_entered.__name__}")
 
         first_letter_of_word = word[:1]
@@ -186,5 +186,3 @@ class WordInfo:
         [result.append(d["speech_part"].upper()) for d in original_meanings_data if d["speech_part"].upper() not in result]
         return result
 
-
-word_info = WordInfo()
