@@ -120,6 +120,7 @@ class WordInfo:
             list_of_definitions_and_examples_span =  [s.text.strip().replace(".", "") for s in spans if 'Slang' not in s.text.strip().replace(".", "")][0:3]
             return self._split_words_and_examples(list_of_definitions_and_examples_span)
         definitions = default_content.find_all('div')
+        # the ugly list comprehension below is due to scraping shitty html or maybe I'm just crap at coding
         list_of_definitions_and_examples_default_content =  ["".join([word for word in d.text.strip().split(".") if '(def' not in word and "1)" not in word]) for d in definitions][0:3]
         
         return self._split_words_and_examples(list_of_definitions_and_examples_default_content)
