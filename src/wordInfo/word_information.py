@@ -198,6 +198,3 @@ class WordInfo:
         error_message = F"The parameter 'word' should be str not {type_of_argument_entered.__name__}"
         if type_of_argument_entered != str:
             raise TypeError(error_message)
-
-word_info = WordInfo()
-print(word_info.get_meaning(7))
